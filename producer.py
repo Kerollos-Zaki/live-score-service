@@ -1,52 +1,69 @@
-print("1. Starting Worker...")
-from kafka import KafkaConsumer
+from kafka import KafkaProducer
 import json
-import redis
-from pymongo import MongoClient
-import sys
+import time
 
-# --- CONFIGURATION ---
-print("2. Connecting to services...")
+producer = KafkaProducer(
+    bootstrap_servers='localhost:9092',
+    value_serializer=lambda v: json.dumps(v).encode('utf-8')
+)
 
-# Connect to Redis & Mongo
-redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
-mongo_client = MongoClient("mongodb://localhost:27017")
-matches_collection = mongo_client["live_score_db"]["matches"]
+MATCHES = [
+    # MATCH 1: Bayern vs Dortmund (Starts at 30 minutes)
+    {
+        "match_id": 1005, 
+        "timeline": [
+            {"score": "1-0", "minute": 30}, # <--- STARTS AT 30'
+            {"score": "1-1", "minute": 45},
+            {"score": "2-1", "minute": 60},
+            {"score": "2-2", "minute": 75},
+            {"score": "3-2", "minute": 90}
+        ]
+    },
+    # MATCH 2: Ahly vs Zamalek (Cairo Derby - Kickoff)
+    {
+        "match_id": 1008, 
+        "timeline": [
+            {"score": "0-0", "minute": 1},
+            {"score": "1-0", "minute": 15}, # Ahly Goal
+            {"score": "1-1", "minute": 35}, # Zamalek Equalizer
+            {"score": "2-1", "minute": 70}, # Ahly Goal
+            {"score": "2-1", "minute": 90}  # FT
+        ]
+    },
+    # MATCH 3: Milan vs Inter (Kickoff)
+    {
+        "match_id": 1006, 
+        "timeline": [
+            {"score": "0-0", "minute": 1},
+            {"score": "0-1", "minute": 20},
+            {"score": "1-1", "minute": 50},
+            {"score": "1-2", "minute": 88},
+            {"score": "1-2", "minute": 90}
+        ]
+    }
+]
 
-# Connect to Kafka
-try:
-    consumer = KafkaConsumer(
-        'match_updates',
-        bootstrap_servers='localhost:9092',
-        auto_offset_reset='earliest',
-        value_deserializer=lambda x: json.loads(x.decode('utf-8'))
-    )
-    print("✅ Worker is READY and LISTENING for updates...")
-except Exception as e:
-    print(f"❌ Kafka Error: {e}")
-    sys.exit(1)
+print(f"⚽ Starting Derby Night Simulation...")
+print(f"   - Bayern: Starts at 30'")
+print(f"   - Ahly vs Zamalek: Kickoff")
 
-# --- LISTENING LOOP ---
-for message in consumer:
-    try:
-        data = message.value
-        match_id = data['match_id']
-        score = data['score']
-        minute = data['minute']
+# Find the longest game
+max_steps = max(len(m["timeline"]) for m in MATCHES)
 
-        print(f"📥 Received Goal: {score} ({minute}') -> Updating Match {match_id}")
-
-        # Update DB
-        matches_collection.update_one(
-            {"match_id": match_id},
-            {"$set": {"score": score, "minute": minute}}
-        )
-
-        # Update Redis
-        current_match = matches_collection.find_one({"match_id": match_id})
-        if current_match:
-            del current_match['_id']
-            redis_client.set(f"match:{match_id}", json.dumps(current_match))
+for step in range(max_steps):
+    for game in MATCHES:
+        if step < len(game["timeline"]):
+            update = game["timeline"][step]
             
-    except Exception as e:
-        print(f"⚠ Error processing message: {e}")
+            message = {
+                "match_id": game["match_id"],
+                "score": update["score"],
+                "minute": update["minute"]
+            }
+            
+            producer.send('match_updates', message)
+            print(f"📢 Match {game['match_id']}: {update['score']} ({update['minute']}')")
+    
+    time.sleep(4) 
+
+print("🏁 All Matches Finished!")
