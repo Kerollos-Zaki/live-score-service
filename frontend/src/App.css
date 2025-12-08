@@ -1,0 +1,228 @@
+/* GLOBAL RESET */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #121212; /* Dark Mode Background */
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Centers the app vertically if content is small */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* APP CONTAINER - The Main Fix */
+.app-container {
+  width: 100%;
+  max-width: 1200px; /* Prevents it from getting too wide on big screens */
+  margin: 0 auto;    /* This centers the whole container */
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* HEADER - Now nicely aligned */
+.header {
+  display: flex;
+  justify-content: space-between; /* Pushes Logo left, Buttons right */
+  align-items: center;
+  width: 100%;       /* Takes full width of the container */
+  margin-bottom: 40px;
+  background-color: #1e1e1e; /* Optional: Adds a subtle background to header */
+  padding: 15px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.soccer-icon {
+  margin-right: 15px;
+  font-size: 2rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* REFRESH BUTTON */
+.refresh-btn {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.refresh-btn:hover {
+  background-color: #00ff88;
+  color: #000;
+  border-color: #00ff88;
+}
+
+/* LIVE BADGE */
+.live-badge {
+  background-color: #ff4b4b;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 10px rgba(255, 75, 75, 0.4);
+}
+
+.live-dot {
+  font-size: 0.6rem;
+  animation: pulse 1.5s infinite;
+}
+
+/* GRID LAYOUT - Centers the cards */
+.match-grid {
+  display: flex;
+  flex-wrap: wrap;        /* Allows items to wrap to next line */
+  justify-content: center; /* Centers items horizontally */
+  gap: 30px;              /* Space between cards */
+  width: 100%;
+}
+
+/* MATCH CARD */
+.card {
+  background-color: #1e1e1e;
+  border-radius: 16px;
+  padding: 25px;
+  width: 350px;           /* Fixed width */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+  border: 1px solid #333;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  border-color: #555;
+}
+
+.live-card {
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+}
+
+/* CARD HEADER */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  font-weight: bold;
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #333;
+  color: #888;
+}
+
+.live-text {
+  color: #00ff88;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+}
+
+/* CARD BODY */
+.card-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 30%;
+}
+
+.team-logo {
+  width: 70px;       /* Slightly larger logos */
+  height: 70px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.team-name {
+  font-size: 1rem;
+  color: #eee;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* SCOREBOARD */
+.scoreboard {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+}
+
+.score-box {
+  background-color: #000;
+  color: #fff; /* or #00ff88 if you want green text always */
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  border: 1px solid #333;
+  min-width: 120px; /* Increased slightly to prevent squishing */
+  
+  /* --- THE FIX START --- */
+  display: flex;            /* Enables flexible layout */
+  flex-direction: row;      /* Forces numbers and dash to sit side-by-side */
+  align-items: center;      /* Vertically centers them */
+  justify-content: center;  /* Horizontally centers them */
+  gap: 10px;                /* Adds space between the numbers and the dash */
+  white-space: nowrap;      /* Prevents wrapping to a new line */
+  /* --- THE FIX END --- */
+}
+
+.live-border {
+  border-color: #00ff88;
+  color: #00ff88;
+}
+
+/* ANIMATION */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* RESPONSIVE: On small screens (phones), stack everything */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+}
