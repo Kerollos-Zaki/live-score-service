@@ -1,4 +1,3 @@
-Here is a README structure based on the files and architecture extracted from your project repository.
 
 # Live Score Service
 
