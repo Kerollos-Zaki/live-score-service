@@ -1,70 +1,16 @@
-
 # Live Score Service
 
-This project is a full-stack application designed to process and display live scores. The application features a Python-based backend architecture and a modern React frontend.
+An event-driven, full-stack application designed to stream and display real-time sports match scores[cite: 1]. The system uses a decoupled producer-consumer architecture to handle real-time data flow efficiently, rendering live updates instantly on a modern frontend dashboard[cite: 1].
 
 ## 🛠️ Tech Stack
 
-* **Backend Environment**: The backend is built using Python, utilizing a `requirements.txt` file for dependencies and `main.py` as a primary script.
+### Backend & Event Streaming
+* **Python**: Core backend application logic[cite: 1].
+* **Producer / Consumer Architecture**: Decoupled messaging scripts (`producer.py` & `consumer.py`) built to handle live, high-frequency score data streaming[cite: 1].
 
+### Frontend Dashboard
+* **React**: Component-based UI for displaying real-time match data dynamically[cite: 1].
+* **Vite**: A fast, modern build tool and development server for the frontend framework[cite: 1].
 
-* **Message Processing**: The architecture utilizes a streaming or messaging model, indicated by the dedicated `producer.py` and `consumer.py` scripts.
-
-
-* **Frontend Framework**: The client side is a React application (`App.jsx`, `main.jsx`) bundled using Vite (`vite.config.js`).
-
-
-* **Package Management**: The frontend relies on Node.js, using `package.json` and `package-lock.json`.
-
-
-* **Infrastructure**: The service includes a `docker-compose.yml` file, indicating it is containerized for streamlined deployment.
-
-
-
-## ⚽ Featured Teams
-
-Based on the frontend assets, the service includes dedicated logos and graphics for the following football clubs:
-
-* Al Ahly (`ahly.png`)
-
-
-* Zamalek (`zamalek.png`)
-
-
-* Liverpool (`Liverpool.png`)
-
-
-* Manchester United (`Man United.png`)
-
-
-
-## 📁 Project Structure
-
-* `main.py` - Core backend application file.
-
-
-* `producer.py` - Script responsible for producing or emitting live score data.
-
-
-* `consumer.py` - Script responsible for consuming the score data.
-
-
-* `docker-compose.yml` - Docker configuration for running the application environment.
-
-
-* `requirements.txt` - Python backend dependencies.
-
-
-* `frontend/` - Root directory for the client-side UI.
-
-
-* `src/` - Contains the core React components (`App.jsx`, `main.jsx`) and stylesheets (`App.css`, `index.css`).
-
-
-* `public/assets/` - Contains static images and team logos.
-
-
-* `vite.config.js` - Configuration for the Vite build tool.
-
-
-* `eslint.config.js` - Linting configuration for frontend code quality.
+### Infrastructure & Operations
+* **Docker / Docker Compose**: Multi-container dockerization ensuring seamless environment setup for the message brokers, backend services, and client dashboard[cite: 1].
